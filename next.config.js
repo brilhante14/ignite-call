@@ -7,6 +7,6 @@ const nextConfig = {
     'api.ts',
     'api.tsx',
   ],
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
