@@ -1,6 +1,7 @@
 import { api } from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
+import { AxiosError } from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ArrowRight } from "phosphor-react";
@@ -46,7 +47,11 @@ export default function Register() {
             username,
          });
       } catch (error) {
-         console.log(error);
+         if (error instanceof AxiosError && error.response?.data.message) {
+            alert(error.response.data.message);
+         } else {
+            console.error(error);
+         }
       }
    }
 
