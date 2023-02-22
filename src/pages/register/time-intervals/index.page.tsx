@@ -1,3 +1,4 @@
+import { convertTimeStringToMinutes } from "@/utils/convert-time-string-to-minutes";
 import { getWeekDays } from "@/utils/get-week-days";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Checkbox, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
@@ -18,13 +19,23 @@ const timeIntervalsFormSchema = z.object({
       }),
    )
       .length(7)
-      .transform(intervals => intervals.filter(interval => interval.enabled))
-      .refine(intervals => intervals.length > 0, {
+      .transform(intervals => intervals.filter(interval => interval.enabled).map(interval => ({
+         weekDay: interval.weekDay,
+         startTimeInMinutes: convertTimeStringToMinutes(interval.startTime),
+         endTimeInMinutes: convertTimeStringToMinutes(interval.endTime),
+      })))
+      .refine(intervals =>
+         intervals.length > 0, {
          message: "Você precisa selecionar pelo menos um dia da semana!",
+      })
+      .refine(intervals =>
+         intervals.every(interval => interval.endTimeInMinutes >= interval.startTimeInMinutes + 60), {
+         message: "Os intervalos devem ser de ao menos 1 hora."
       }),
 });
 
-type TimeIntervalsForm = z.infer<typeof timeIntervalsFormSchema>;
+type TimeIntervalsFormInput = z.input<typeof timeIntervalsFormSchema>;
+type TimeIntervalsFormOutput = z.output<typeof timeIntervalsFormSchema>;
 
 export default function TimeIntervals() {
    const {
@@ -36,7 +47,7 @@ export default function TimeIntervals() {
          errors
       },
       control,
-   } = useForm({
+   } = useForm<TimeIntervalsFormInput>({
       defaultValues: {
          intervals: [
             { weekDay: 0, enabled: false, startTime: "08:00", endTime: "18:00" },
@@ -60,7 +71,9 @@ export default function TimeIntervals() {
 
    const intervals = watch("intervals");
 
-   async function handleSetTimeIntervals(data: TimeIntervalsForm) {
+   async function handleSetTimeIntervals(data: any) {
+      const formData = data as TimeIntervalsFormOutput;
+      console.log(data);
    }
 
    return (
