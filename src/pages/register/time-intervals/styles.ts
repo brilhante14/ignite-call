@@ -1,4 +1,4 @@
-import { Box, styled } from "@ignite-ui/react";
+import { Box, styled, TextInput } from "@ignite-ui/react";
 
 
 export const IntervalBox = styled(Box, {
@@ -36,6 +36,10 @@ export const IntervalInputs = styled("div", {
    gap: "$2",
 
    "input::-webkit-calendar-picker-indicator": {
-      filter: "invert(100%) brightness(40%)"
-   }
+      filter: "invert(100%) brightness(40%)",
+   },
+
+   [`input:disabled`]: {
+      opacity: "40%",
+   },
 });
