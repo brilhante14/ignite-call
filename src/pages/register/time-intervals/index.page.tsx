@@ -73,7 +73,7 @@ export default function TimeIntervals() {
 
    async function handleSetTimeIntervals(data: any) {
       const formData = data as TimeIntervalsFormOutput;
-      console.log(data);
+      console.log(formData);
    }
 
    return (
