@@ -36,7 +36,7 @@ export default function ConnectCalendar() {
                <MultiStep size={4} currentStep={2} />
             </Header>
 
-            <ConnectBox as="form" onSubmit={handleSubmit}>
+            <ConnectBox>
                <ConnectItem>
                   <Text>Google Calendar</Text>
 
@@ -60,7 +60,7 @@ export default function ConnectCalendar() {
                   </AuthError>
                )}
 
-               <Button type="submit" disabled={!isSignedIn}>
+               <Button onClick={handleSubmit} type="submit" disabled={!isSignedIn}>
                   Próximo passo
                   <ArrowRight />
                </Button>

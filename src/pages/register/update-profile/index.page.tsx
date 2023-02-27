@@ -1,3 +1,4 @@
+import { api } from "@/lib/axios";
 import { buildNextAuthOptions } from "@/pages/api/auth/[...nextauth].api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Avatar, Button, Heading, MultiStep, Text, TextArea } from "@ignite-ui/react";
@@ -5,6 +6,7 @@ import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { ArrowRight } from "phosphor-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,6 +20,8 @@ const updateProfileFormSchema = z.object({
 type UpdateProfileFormData = z.infer<typeof updateProfileFormSchema>;
 
 export default function Register() {
+   const router = useRouter();
+
    const {
       formState: { isSubmitting },
       handleSubmit,
@@ -27,10 +31,11 @@ export default function Register() {
    });
 
    const session = useSession();
-   console.log(session)
 
+   async function handleUpdateProfile(data: UpdateProfileFormData) {
+      await api.put('/users/profile', { bio: data.bio });
 
-   async function handleRegister(data: UpdateProfileFormData) {
+      await router.push(`/schedule/${session.data?.user.username}`);
    }
 
    return (
@@ -46,7 +51,7 @@ export default function Register() {
                <MultiStep size={4} currentStep={4} />
             </Header>
 
-            <ProfileBox as="form" onSubmit={handleSubmit(handleRegister)}>
+            <ProfileBox as="form" onSubmit={handleSubmit(handleUpdateProfile)}>
                <label>
                   <Text size="sm">Foto de perfil</Text>
 
