@@ -17,6 +17,10 @@ export default function ConnectCalendar() {
       await signIn("google");
    }
 
+   async function handleSubmit() {
+      await router.push("/register/time-intervals");
+   }
+
    return (
       <>
          <Head>
@@ -32,7 +36,7 @@ export default function ConnectCalendar() {
                <MultiStep size={4} currentStep={2} />
             </Header>
 
-            <ConnectBox>
+            <ConnectBox as="form" onSubmit={handleSubmit}>
                <ConnectItem>
                   <Text>Google Calendar</Text>
 

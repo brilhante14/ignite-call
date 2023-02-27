@@ -1,6 +1,6 @@
 import { buildNextAuthOptions } from "@/pages/api/auth/[...nextauth].api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Heading, MultiStep, Text, TextArea } from "@ignite-ui/react";
+import { Avatar, Button, Heading, MultiStep, Text, TextArea } from "@ignite-ui/react";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
@@ -27,8 +27,8 @@ export default function Register() {
    });
 
    const session = useSession();
+   console.log(session)
 
-   const isLogged = session.status === "authenticated";
 
    async function handleRegister(data: UpdateProfileFormData) {
    }
@@ -49,6 +49,8 @@ export default function Register() {
             <ProfileBox as="form" onSubmit={handleSubmit(handleRegister)}>
                <label>
                   <Text size="sm">Foto de perfil</Text>
+
+                  <Avatar src={session.data?.user.avatar_url} alt={session.data?.user.name} />
                </label>
 
                <label>
