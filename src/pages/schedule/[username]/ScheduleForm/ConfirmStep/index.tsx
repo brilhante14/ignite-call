@@ -41,7 +41,7 @@ export function ConfirmStep() {
             <Text size="sm">Nome Completo</Text>
             <TextInput placeholder="Seu nome" {...register("name")} />
             {errors.name && (
-               <FormError>
+               <FormError size="sm">
                   {errors.name.message}
                </FormError>
             )}
@@ -51,7 +51,7 @@ export function ConfirmStep() {
             <Text size="sm">Endereço de email</Text>
             <TextInput type="email" placeholder="johndoe@example.com" {...register("email")} />
             {errors.email && (
-               <FormError>
+               <FormError size="sm">
                   {errors.email.message}
                </FormError>
             )}
