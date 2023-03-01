@@ -29,7 +29,6 @@ export default function Schedule({ user }: IScheduleProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-
    return {
       paths: [],
       fallback: "blocking",
