@@ -14,7 +14,12 @@ interface ICalendarWeek {
 
 type CalendarWeeks = ICalendarWeek[];
 
-export function Calendar() {
+interface ICalendarProps {
+   selectedDate: Date | null;
+   onDateSelect: (date: Date) => void;
+}
+
+export function Calendar({ selectedDate, onDateSelect }: ICalendarProps) {
    const [currentDate, setCurrentDate] = useState(() => {
       return dayjs().set('date', 1);
    });
@@ -53,7 +58,7 @@ export function Calendar() {
 
       const calendarDays = [
          ...previousMonthArray.map(date => ({ date, disabled: true })),
-         ...currentMonthArray.map(date => ({ date, disabled: false })),
+         ...currentMonthArray.map(date => ({ date, disabled: date.endOf("day").isBefore(new Date()) })),
          ...nextMonthArray.map(date => ({ date, disabled: true })),
       ];
 
@@ -69,8 +74,6 @@ export function Calendar() {
 
          return week;
       }, []);
-
-      console.log(calendarWeeks)
 
       return calendarWeeks;
    }, [currentDate]);
@@ -104,7 +107,10 @@ export function Calendar() {
                   <tr key={week}>
                      {days.map(({ date, disabled }) => (
                         <td key={date.toString()}>
-                           <CalendarDay disabled={disabled}>
+                           <CalendarDay
+                              onClick={() => onDateSelect(date.toDate())}
+                              disabled={disabled}
+                           >
                               {date.get("date")}
                            </CalendarDay>
                         </td>
