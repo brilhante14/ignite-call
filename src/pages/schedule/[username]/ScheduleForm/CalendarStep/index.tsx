@@ -1,8 +1,9 @@
 import { Calendar } from "@/components/Calendar";
 import { api } from "@/lib/axios";
+import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Container, TimePicker, TimePickerHeader, TimePickerItem, TimePickerList } from "./styles";
 
 interface IAvailability {
@@ -11,36 +12,31 @@ interface IAvailability {
 }
 
 export function CalendarStep() {
+   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
    const router = useRouter();
    const username = String(router.query.username);
 
-   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-   const [availability, setAvailability] = useState<IAvailability | null>(null);
-
-   const isDateSelected = !!selectedDate;
-
+   const selectedDateWithoutTimestamp = selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : null;
    const weekDay = selectedDate ? dayjs(selectedDate).format("dddd") : null;
    const describeDate = selectedDate ? dayjs(selectedDate).format("DD[ de ]MMMM") : null;
 
-   useEffect(() => {
-      (async () => {
-         if (!selectedDate) {
-            return;
-         }
-
+   const { data: availability } = useQuery<IAvailability>(
+      ["availability", selectedDateWithoutTimestamp],
+      async () => {
          const { data } = await api.get(`/users/${username}/availability`, {
             params: {
-               date: dayjs(selectedDate).format("YYYY-MM-DD"),
+               date: selectedDateWithoutTimestamp,
             },
          });
+         return data;
+      },
+      {
+         enabled: !!selectedDate,
+      },
+   );
 
-         setAvailability({
-            availableHours: data.availableHours,
-            possibleHours: data.possibleHours,
-         });
-
-      })()
-   }, [selectedDate, username]);
+   const isDateSelected = !!selectedDate;
 
    function isHourDisabled(possibleHour: number) {
       return !availability?.availableHours.includes(possibleHour);

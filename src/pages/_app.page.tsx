@@ -1,6 +1,6 @@
 import { queryClient } from '@/lib/react-query';
 import { globalStyles } from '@/styles/global';
-import { QueryClientProvider } from '@tanstack/react-query/build/lib/QueryClientProvider';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 
