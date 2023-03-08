@@ -19,6 +19,7 @@ type CalendarWeeks = ICalendarWeek[];
 
 interface IBlockedDates {
    blockedWeekDays: number[];
+   dateToBlock: number[];
 }
 
 interface ICalendarProps {
@@ -45,7 +46,7 @@ export function Calendar({ selectedDate, onDateSelect }: ICalendarProps) {
          const { data } = await api.get(`/users/${username}/blocked-dates`, {
             params: {
                year: currentDate.get("year"),
-               month: currentDate.get("month"),
+               month: ("0" + (currentDate.get("month") + 1)).slice(-2),
             },
          });
          return data;
@@ -86,7 +87,10 @@ export function Calendar({ selectedDate, onDateSelect }: ICalendarProps) {
          ...previousMonthArray.map(date => ({ date, disabled: true })),
          ...currentMonthArray.map(date => ({
             date,
-            disabled: date.endOf("day").isBefore(new Date()) || blockedDates.blockedWeekDays.includes(date.get("day"))
+            disabled:
+               date.endOf("day").isBefore(new Date()) ||
+               blockedDates.blockedWeekDays.includes(date.get("day")) ||
+               blockedDates.dateToBlock.includes(date.get("date"))
          })),
          ...nextMonthArray.map(date => ({ date, disabled: true })),
       ];
