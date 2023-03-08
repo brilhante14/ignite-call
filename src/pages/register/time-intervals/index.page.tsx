@@ -3,7 +3,7 @@ import { convertTimeStringToMinutes } from "@/utils/convert-time-string-to-minut
 import { getWeekDays } from "@/utils/get-week-days";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Checkbox, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { ArrowRight } from "phosphor-react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -87,9 +87,8 @@ export default function TimeIntervals() {
 
    return (
       <>
-         <Head>
-            <title>Registro | Ignite Call</title>
-         </Head>
+         <NextSeo title="Seleci  one sua disponibilidade | Ignite Call" noindex />
+
          <Container>
             <Header>
                <Heading as="strong">Quase lá</Heading>

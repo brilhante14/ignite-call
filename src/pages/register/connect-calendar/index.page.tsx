@@ -1,6 +1,6 @@
 import { Button, Heading, MultiStep, Text } from "@ignite-ui/react";
 import { signIn, useSession } from "next-auth/react";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { ArrowRight, Check } from "phosphor-react";
 import { Container, Header } from "../styles";
@@ -23,9 +23,7 @@ export default function ConnectCalendar() {
 
    return (
       <>
-         <Head>
-            <title>Registro | Ignite Call</title>
-         </Head>
+         <NextSeo title="Conecte sua agenda do Google | Ignite Call" noindex />
          <Container>
             <Header>
                <Heading as="strong">Conecte sua agenda!</Heading>

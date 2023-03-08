@@ -5,7 +5,7 @@ import { Avatar, Button, Heading, MultiStep, Text, TextArea } from "@ignite-ui/r
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { ArrowRight } from "phosphor-react";
 import { useForm } from "react-hook-form";
@@ -41,9 +41,8 @@ export default function Register() {
 
    return (
       <>
-         <Head>
-            <title>Perfil | Ignite Call</title>
-         </Head>
+         <NextSeo title="Atualize seu perfil | Ignite Call" noindex />
+
          <Container>
             <Header>
                <Heading as="strong">Bem vindo ao Ignite Call!</Heading>

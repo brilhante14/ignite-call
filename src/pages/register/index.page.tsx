@@ -2,7 +2,7 @@ import { api } from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
 import { AxiosError } from "axios";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { ArrowRight } from "phosphor-react";
 import { useEffect } from "react";
@@ -59,9 +59,7 @@ export default function Register() {
 
    return (
       <>
-         <Head>
-            <title>Registro | Ignite Call</title>
-         </Head>
+         <NextSeo title="Crie uma conta | Ignite Call" />
          <Container>
             <Header>
                <Heading as="strong">Bem vindo ao Ignite Call!</Heading>
