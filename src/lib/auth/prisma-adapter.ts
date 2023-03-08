@@ -30,7 +30,7 @@ export function PrismaAdapter(
          return {
             id: prismaUser.id,
             name: prismaUser.name,
-            username: prismaUser.name,
+            username: prismaUser.username,
             email: prismaUser.email!,
             emailVerified: null,
             avatar_url: prismaUser.avatar_url!,
