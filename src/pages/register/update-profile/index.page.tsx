@@ -32,6 +32,7 @@ export default function Register() {
 
    const session = useSession();
 
+
    async function handleUpdateProfile(data: UpdateProfileFormData) {
       await api.put('/users/profile', { bio: data.bio });
 
