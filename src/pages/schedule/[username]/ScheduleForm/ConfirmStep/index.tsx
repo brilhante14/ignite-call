@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Text, TextArea, TextInput } from "@ignite-ui/react";
+import dayjs from "dayjs";
 import { CalendarBlank, Clock } from "phosphor-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,7 +14,14 @@ const confirmFormSchema = z.object({
 
 type ConfirmFormData = z.infer<typeof confirmFormSchema>;
 
-export function ConfirmStep() {
+interface IConfirmStepProps {
+   schedulingDate: Date;
+}
+
+export function ConfirmStep({ schedulingDate }: IConfirmStepProps) {
+   const describredDate = dayjs(schedulingDate).format("DD[ de ]MMMM[ de ]YYYY")
+   const describedTime = dayjs(schedulingDate).format("HH:mm[h]")
+
    const {
       register,
       handleSubmit,
@@ -29,11 +37,11 @@ export function ConfirmStep() {
          <FormHeader>
             <Text>
                <CalendarBlank />
-               22 de setembro de 2022
+               {describredDate}
             </Text>
             <Text>
                <Clock />
-               18:00h
+               {describedTime}
             </Text>
          </FormHeader>
 
