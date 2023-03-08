@@ -70,7 +70,7 @@ export function PrismaAdapter(
          return {
             id: user.id,
             name: user.name,
-            username: user.name,
+            username: user.username,
             email: user.email!,
             emailVerified: null,
             avatar_url: user.avatar_url!,
@@ -97,7 +97,7 @@ export function PrismaAdapter(
          return {
             id: user.id,
             name: user.name,
-            username: user.name,
+            username: user.username,
             email: user.email!,
             emailVerified: null,
             avatar_url: user.avatar_url!,
@@ -119,7 +119,7 @@ export function PrismaAdapter(
          return {
             id: updatedUser.id,
             name: updatedUser.name,
-            username: updatedUser.name,
+            username: updatedUser.username,
             email: updatedUser.email!,
             emailVerified: null,
             avatar_url: updatedUser.avatar_url!,
@@ -184,7 +184,7 @@ export function PrismaAdapter(
             user: {
                id: user.id,
                name: user.name,
-               username: user.name,
+               username: user.username,
                email: user.email!,
                emailVerified: null,
                avatar_url: user.avatar_url!,
