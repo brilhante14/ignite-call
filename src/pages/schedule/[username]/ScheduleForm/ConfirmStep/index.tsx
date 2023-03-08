@@ -1,6 +1,8 @@
+import { api } from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Text, TextArea, TextInput } from "@ignite-ui/react";
 import dayjs from "dayjs";
+import { useRouter } from "next/router";
 import { CalendarBlank, Clock } from "phosphor-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,12 +18,15 @@ type ConfirmFormData = z.infer<typeof confirmFormSchema>;
 
 interface IConfirmStepProps {
    schedulingDate: Date;
-   handleCancel: () => void;
+   returnToCalendarView: () => void;
 }
 
-export function ConfirmStep({ schedulingDate, handleCancel }: IConfirmStepProps) {
+export function ConfirmStep({ schedulingDate, returnToCalendarView }: IConfirmStepProps) {
    const describredDate = dayjs(schedulingDate).format("DD[ de ]MMMM[ de ]YYYY")
    const describedTime = dayjs(schedulingDate).format("HH:mm[h]")
+
+   const router = useRouter();
+   const username = String(router.query.username)
 
    const {
       register,
@@ -30,7 +35,16 @@ export function ConfirmStep({ schedulingDate, handleCancel }: IConfirmStepProps)
    } = useForm<ConfirmFormData>({ resolver: zodResolver(confirmFormSchema) });
 
    async function handleConfirmScheduling(data: ConfirmFormData) {
+      const { email, name, observations } = data;
 
+      await api.post(`/users/${username}/schedule`, {
+         name,
+         email,
+         observations,
+         date: schedulingDate,
+      });
+
+      returnToCalendarView();
    }
 
    return (
@@ -72,8 +86,13 @@ export function ConfirmStep({ schedulingDate, handleCancel }: IConfirmStepProps)
          </label>
 
          <FormActions>
-            <Button type="button" variant="tertiary" onClick={handleCancel}>Cancelar</Button>
-            <Button type="submit" disabled={isSubmitting}>Confirmar</Button>
+            <Button type="button" variant="tertiary" onClick={returnToCalendarView}>Cancelar</Button>
+            <Button
+               type="submit"
+               disabled={isSubmitting}
+            >
+               Confirmar
+            </Button>
          </FormActions>
       </ConfirmForm>
    );

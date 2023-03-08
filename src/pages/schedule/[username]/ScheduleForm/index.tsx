@@ -16,7 +16,7 @@ export function ScheduleForm() {
             <title>Agendamento | Ignite Call</title>
          </Head>
          {selectedDateTime ?
-            <ConfirmStep schedulingDate={selectedDateTime} handleCancel={handleClearSelectedDateTime} />
+            <ConfirmStep schedulingDate={selectedDateTime} returnToCalendarView={handleClearSelectedDateTime} />
             :
             <CalendarStep handleSelectingDateTime={setSelectedDateTime} />
          }
