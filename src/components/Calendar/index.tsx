@@ -1,5 +1,8 @@
+import { api } from "@/lib/axios";
 import { getWeekDays } from "@/utils/get-week-days";
+import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { useRouter } from "next/router";
 import { CaretLeft, CaretRight } from "phosphor-react";
 import { useMemo, useState } from "react";
 import { CalendarActions, CalendarBody, CalendarContainer, CalendarDay, CalendarHeader, CalendarTitle } from "./styles";
@@ -14,12 +17,19 @@ interface ICalendarWeek {
 
 type CalendarWeeks = ICalendarWeek[];
 
+interface IBlockedDates {
+   blockedWeekDays: number[];
+}
+
 interface ICalendarProps {
    selectedDate: Date | null;
    onDateSelect: (date: Date) => void;
 }
 
 export function Calendar({ selectedDate, onDateSelect }: ICalendarProps) {
+   const router = useRouter();
+   const username = String(router.query.username)
+
    const [currentDate, setCurrentDate] = useState(() => {
       return dayjs().set('date', 1);
    });
@@ -28,6 +38,20 @@ export function Calendar({ selectedDate, onDateSelect }: ICalendarProps) {
    const currentYear = currentDate.format("YYYY");
 
    const shortWeekDays = getWeekDays({ short: true });
+
+   const { data: blockedDates } = useQuery<IBlockedDates>(
+      ["blocked-dates", currentDate.get("year"), currentDate.get("month")],
+      async () => {
+         const { data } = await api.get(`/users/${username}/blocked-dates`, {
+            params: {
+               year: currentDate.get("year"),
+               month: currentDate.get("month"),
+            },
+         });
+         return data;
+      },
+   );
+
 
    function handlePreviousMonth() {
       setCurrentDate(date => date.subtract(1, "month"));
@@ -38,6 +62,8 @@ export function Calendar({ selectedDate, onDateSelect }: ICalendarProps) {
    }
 
    const calendarWeeks = useMemo(() => {
+      if (!blockedDates) return [];
+
       const currentMonthArray = Array.from({ length: currentDate.daysInMonth() }).map((_, i) => {
          return currentDate.set("date", i + 1);
       });
@@ -58,7 +84,10 @@ export function Calendar({ selectedDate, onDateSelect }: ICalendarProps) {
 
       const calendarDays = [
          ...previousMonthArray.map(date => ({ date, disabled: true })),
-         ...currentMonthArray.map(date => ({ date, disabled: date.endOf("day").isBefore(new Date()) })),
+         ...currentMonthArray.map(date => ({
+            date,
+            disabled: date.endOf("day").isBefore(new Date()) || blockedDates.blockedWeekDays.includes(date.get("day"))
+         })),
          ...nextMonthArray.map(date => ({ date, disabled: true })),
       ];
 
@@ -76,7 +105,7 @@ export function Calendar({ selectedDate, onDateSelect }: ICalendarProps) {
       }, []);
 
       return calendarWeeks;
-   }, [currentDate]);
+   }, [currentDate, blockedDates]);
 
    return (
       <CalendarContainer>
